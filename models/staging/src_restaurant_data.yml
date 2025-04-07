@@ -1,0 +1,75 @@
+sources:
+  - name: restaurant_data
+    database: annular-mesh-453913-r6
+    tables:
+      - name: orders
+        description: "Each row represents an item ordered."
+        columns:
+          - name: table_no
+            description: "The table number that placed the order."
+          - name: item_uuid
+            description: "The ID of the menu item."
+          - name: datetime_ordered
+            description: "The timestamp when the order was placed."
+          - name: dep
+            description: "The production department."
+          - name: order_uuid
+            description: "The ID for the group order (items ordered together)."
+      - name: a_la_carte_menu
+        description: "Menu table containing a la carte items."
+        columns:
+          - name: item_uuid
+            description: "Unique identifier for the item."
+          - name: item_name
+            description: "Name of the menu item."
+          - name: category
+            description: "Category of the menu item."
+          - name: desc
+            description: "Description of the menu item."
+          - name: price
+            description: "Price of the item, stored as a string."
+          - name: is_priced_per_weight
+            description: "Boolean flag indicating if the item is priced per weight."
+      - name: cocktails_and_beer_menu
+        description: "Menu table for cocktails and beer."
+        columns:
+          - name: item_uuid
+            description: "Unique identifier for the item."
+          - name: item_name
+            description: "Name of the menu item."
+          - name: category
+            description: "Category of the menu item."
+          - name: desc
+            description: "Description of the menu item."
+          - name: price
+            description: "Price of the item as a float."
+      - name: dessert_menu
+        description: "Menu table for desserts."
+        columns:
+          - name: item_uuid
+            description: "Unique identifier for the dessert item."
+          - name: item_name
+            description: "Name of the dessert item."
+          - name: category
+            description: "Category of the dessert."
+          - name: desc
+            description: "Description of the dessert."
+          - name: price
+            description: "Price of the dessert as a float."
+      - name: wine_menu
+        description: "Menu table for wines."
+        columns:
+          - name: item_uuid
+            description: "Unique identifier for the wine item."
+          - name: item_name
+            description: "Name of the wine item."
+          - name: category
+            description: "Category of the wine."
+          - name: origin_region
+            description: "The region where the wine originates."
+          - name: origin_country
+            description: "The country where the wine originates."
+          - name: serving_size
+            description: "Serving size for the wine."
+          - name: price
+            description: "Price of the wine as an integer."

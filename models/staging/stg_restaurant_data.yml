@@ -1,0 +1,97 @@
+version: 2
+
+models:
+  - name: stg_a_la_carte_menu
+    description: "Staging model for a_la_carte menu items with basic cleaning and standardization."
+    columns:
+      - name: item_uuid
+        tests: 
+          - not_null
+          - unique
+      - name: item_name
+        tests: 
+          - not_null
+      - name: category
+        tests: 
+          - not_null
+      - name: description
+      - name: price
+      - name: is_priced_per_weight
+
+  - name: stg_cocktails_and_beer_menu
+    description: "Staging model for cocktails and beer menu items."
+    columns:
+      - name: item_uuid
+        tests: 
+          - not_null
+          - unique
+      - name: item_name
+        tests: 
+          - not_null
+      - name: category
+        tests: 
+          - not_null
+      - name: description
+      - name: price
+
+  - name: stg_dessert_menu
+    description: "Staging model for dessert menu items."
+    columns:
+      - name: item_uuid
+        tests: 
+          - not_null
+          - unique
+      - name: item_name
+        tests: 
+          - not_null
+      - name: category
+        tests: 
+          - not_null
+      - name: description
+      - name: price
+
+  - name: stg_wine_menu
+    description: "Staging model for wine menu items, includes regional metadata and serving size."
+    columns:
+      - name: item_uuid
+        tests: 
+          - not_null
+          - unique
+      - name: item_name
+        tests: 
+          - not_null
+      - name: category
+        tests: 
+          - not_null
+      - name: origin_region
+      - name: origin_country
+      - name: serving_size
+      - name: price
+
+  - name: stg_orders
+    description: >
+      This staging model aggregates raw orders data to calculate the quantity
+      of each ordered item and generates a unique surrogate key.
+    columns:
+      - name: item_ordered_id
+        description: "A surrogate key generated for each aggregated order record."
+        tests: 
+          - not_null
+          - unique
+      - name: table_no
+        description: "The table number where the order was placed."
+      - name: item_uuid
+        description: "Unique identifier for the menu item that was ordered."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_menu_items')
+              field: item_uuid
+      - name: datetime_ordered
+        description: "Timestamp when the order was placed."
+      - name: production_department
+        description: "Production department handling the order."
+      - name: order_uuid
+        description: "Identifier for the group of items ordered together."
+      - name: quantity
+        description: "The count of identical items aggregated from the raw orders."
