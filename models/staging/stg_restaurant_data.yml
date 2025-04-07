@@ -1,6 +1,73 @@
 version: 2
 
 models:
+  - name: stg_a_la_carte_menu
+    description: "Staging model for a_la_carte menu items with basic cleaning and standardization."
+    columns:
+      - name: item_uuid
+        tests: 
+          - not_null
+          - unique
+      - name: item_name
+        tests: 
+          - not_null
+      - name: category
+        tests: 
+          - not_null
+      - name: description
+      - name: price
+      - name: is_priced_per_weight
+
+  - name: stg_cocktails_and_beer_menu
+    description: "Staging model for cocktails and beer menu items."
+    columns:
+      - name: item_uuid
+        tests: 
+          - not_null
+          - unique
+      - name: item_name
+        tests: 
+          - not_null
+      - name: category
+        tests: 
+          - not_null
+      - name: description
+      - name: price
+
+  - name: stg_dessert_menu
+    description: "Staging model for dessert menu items."
+    columns:
+      - name: item_uuid
+        tests: 
+          - not_null
+          - unique
+      - name: item_name
+        tests: 
+          - not_null
+      - name: category
+        tests: 
+          - not_null
+      - name: description
+      - name: price
+
+  - name: stg_wine_menu
+    description: "Staging model for wine menu items, includes regional metadata and serving size."
+    columns:
+      - name: item_uuid
+        tests: 
+          - not_null
+          - unique
+      - name: item_name
+        tests: 
+          - not_null
+      - name: category
+        tests: 
+          - not_null
+      - name: origin_region
+      - name: origin_country
+      - name: serving_size
+      - name: price
+
   - name: stg_orders
     description: >
       This staging model aggregates raw orders data to calculate the quantity
@@ -8,9 +75,9 @@ models:
     columns:
       - name: item_ordered_id
         description: "A surrogate key generated for each aggregated order record."
-        tests:
-          - unique
+        tests: 
           - not_null
+          - unique
       - name: table_no
         description: "The table number where the order was placed."
       - name: item_uuid
@@ -18,7 +85,7 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('stg_menu_items')
+              to: ref('dim_menu_items')
               field: item_uuid
       - name: datetime_ordered
         description: "Timestamp when the order was placed."
@@ -28,82 +95,3 @@ models:
         description: "Identifier for the group of items ordered together."
       - name: quantity
         description: "The count of identical items aggregated from the raw orders."
-
-  - name: stg_menu_items
-    description: >
-      This unified staging model consolidates all menus (a_la_carte, cocktails_and_beer,
-      dessert, and wine) into a single table. It standardizes column names, converts the
-      price to a float, and includes a menu_source field to indicate the origin.
-    columns:
-      - name: item_uuid
-        description: "Unique identifier for the menu item."
-        tests:
-          - not_null
-          - unique
-      - name: item_name
-        description: "Name of the menu item."
-        tests:
-          - not_null
-      - name: category
-        description: >
-          Category of the menu item. Accepted values include:
-          'Bordeaux', 'Burgundy', 'Magnums','Champagne & Sparkling', 'Dessert Wines', 'Port & Sherry', 'Rarities',
-          'Red Wines', 'Rose Wines', 'White Wines', 'The Sacred Six',
-          'Ultimate Steakhouse Cocktails', 'Time & A Place', 'Lo & No Alc', 'Beers & Cider',
-          'Starters', 'Mains', 'Large Cuts', 'Steaks', 'Sauces', 'Extras', 'Sides',
-          'Puddings', 'Ice-Cream & Sorbet', 'Chocolates', and 'Cheese'.
-        tests:
-          - not_null
-          - accepted_values:
-              values:
-                - 'Bordeaux'
-                - 'Champagne & Sparkling'
-                - 'Dessert Wines'
-                - 'Port & Sherry'
-                - 'Rarities'
-                - 'Red Wines'
-                - 'Rose Wines'
-                - 'White Wines'
-                - 'Cheese'
-                - 'The Sacred Six'
-                - 'Ultimate Steakhouse Cocktails'
-                - 'Time & A Place'
-                - 'Lo & No Alc'
-                - 'Beers & Cider'
-                - 'Starters'
-                - 'Mains'
-                - 'Large Cuts'
-                - 'Steaks'
-                - 'Sauces'
-                - 'Extras'
-                - 'Sides'
-                - 'Burgundy'
-                - 'Magnums'
-                - 'Puddings'
-                - 'Ice-Cream & Sorbet'
-                - 'Chocolates'
-      - name: description
-        description: >
-          A description of the item. In menus where the original column was 'desc',
-          it is aliased to 'description'. For the wine menu, a null is explicitly cast
-          as a string.
-      - name: price
-        description: >
-          The price of the item as a float. Non-numeric values are handled using SAFE_CAST
-          (or custom logic) so that invalid values (e.g., "Market price") become NULL.
-        tests:
-          - not_null
-      - name: is_priced_per_weight
-        description: "Boolean flag indicating if the item is priced per weight (only applicable for a_la_carte)."
-        tests:
-          - not_null
-      - name: origin_region
-        description: "The region of origin (only applicable for wine items)."
-      - name: origin_country
-        description: "The country of origin (only applicable for wine items)."
-      - name: serving_size
-        description: "The serving size (only applicable for wine items)."
-      - name: menu_source
-        description: "A label indicating the source menu (e.g., a_la_carte, cocktails_and_beer, dessert, wine)."
-        tests:
-          - not_null

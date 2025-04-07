@@ -3,42 +3,42 @@ with a_la_carte as (
         item_uuid,
         item_name,
         category,
-        `desc` as description,  
+        description,  
         coalesce(safe_cast(price as float64), 0.0) as price,
         is_priced_per_weight,
         ' ' as origin_region,
         ' ' as origin_country,
         null as serving_size,
         'a_la_carte' as menu_source
-    from {{ source('restaurant_data', 'a_la_carte_menu') }}
+    from {{ ref('stg_a_la_carte_menu') }}
 ),
 cocktails_and_beer as (
     select
         item_uuid,
         item_name,
         category,
-        `desc` as description,
+        description,
         coalesce(safe_cast(price as float64), 0.0) as price,
         false as is_priced_per_weight,
         ' ' as origin_region,
         ' ' as origin_country,
         null as serving_size,
         'cocktails_and_beer' as menu_source
-    from {{ source('restaurant_data', 'cocktails_and_beer_menu') }}
+    from {{ ref('stg_cocktails_and_beer_menu') }}
 ),
 dessert as (
     select
         item_uuid,
         item_name,
         category,
-        `desc` as description,
+        description,
         coalesce(safe_cast(price as float64), 0.0) as price,
         false as is_priced_per_weight,
         ' ' as origin_region,
         ' ' as origin_country,
         null as serving_size,
         'dessert' as menu_source
-    from {{ source('restaurant_data', 'dessert_menu') }}
+    from {{ ref('stg_dessert_menu') }}
 ),
 wine as (
     select
@@ -52,7 +52,7 @@ wine as (
         origin_country,
         serving_size,         
         'wine' as menu_source
-    from {{ source('restaurant_data', 'wine_menu') }}
+    from {{ ref('stg_wine_menu') }}
 )
 
 select *

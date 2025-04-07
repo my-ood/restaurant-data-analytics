@@ -1,0 +1,73 @@
+version: 2
+
+models:
+  - name: dim_menu_items
+    description: >
+      A unified, analytics-ready menu dimension that consolidates
+      all staging menu sources (a_la_carte, cocktails_and_beer, dessert, wine).
+    columns:
+      - name: item_uuid
+        description: "Unique identifier for the menu item."
+        tests:
+          - not_null
+          - unique
+      - name: item_name
+        tests:
+          - not_null
+      - name: category
+        description: "Category of the menu item." 
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - 'Bordeaux'
+                - 'Champagne & Sparkling'
+                - 'Dessert Wines'
+                - 'Port & Sherry'
+                - 'Rarities'
+                - 'Red Wines'
+                - 'Rose Wines'
+                - 'White Wines'
+                - 'Cheese'
+                - 'The Sacred Six'
+                - 'Ultimate Steakhouse Cocktails'
+                - 'Time & A Place'
+                - 'Lo & No Alc'
+                - 'Beers & Cider'
+                - 'Starters'
+                - 'Mains'
+                - 'Large Cuts'
+                - 'Steaks'
+                - 'Sauces'
+                - 'Extras'
+                - 'Sides'
+                - 'Burgundy'
+                - 'Magnums'
+                - 'Puddings'
+                - 'Ice-Cream & Sorbet'
+                - 'Chocolates'
+      - name: description
+        description: >
+          A description of the item. In menus where the original column was 'desc',
+          it is aliased to 'description'. For the wine menu, a null is explicitly cast
+          as a string.
+      - name: price
+        description: >
+          The price of the item as a float. Non-numeric values are handled using SAFE_CAST
+          (or custom logic) so that invalid values (e.g., "Market price") become NULL.
+        tests:
+          - not_null
+      - name: is_priced_per_weight
+        description: "Boolean flag indicating if the item is priced per weight (only applicable for a_la_carte)."
+        tests:
+          - not_null
+      - name: origin_region
+        description: "The region of origin (only applicable for wine items)."
+      - name: origin_country
+        description: "The country of origin (only applicable for wine items)."
+      - name: serving_size
+        description: "The serving size (only applicable for wine items)."
+      - name: menu_source
+        description: "A label indicating the source menu (e.g., a_la_carte, cocktails_and_beer, dessert, wine)."
+        tests:
+          - not_null
