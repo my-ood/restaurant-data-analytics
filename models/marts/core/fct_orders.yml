@@ -1,0 +1,102 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: >
+      A fact table representing all items ordered during restaurant service,
+      enriched with menu metadata and time-based breakdowns. Each row represents
+      a single item ordered as part of a group order. Includes calculated revenue
+      and extracted datetime dimensions for analysis.
+    columns:
+      - name: item_ordered_id
+        description: "A surrogate key uniquely identifying an individual item within a group order."
+        tests:
+          - not_null
+          - unique
+
+      - name: table_no
+        description: "The table number associated with the order."
+        tests:
+          - not_null
+
+      - name: item_uuid
+        description: "The UUID of the ordered menu item, used to join with dim_menu_items."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_menu_items')
+              field: item_uuid
+
+      - name: datetime_ordered
+        description: "Timestamp when the order was placed."
+        tests:
+          - not_null
+
+      - name: production_department
+        description: "Department responsible for preparing the item (e.g., kitchen, bar)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: 
+                - kitchen
+                - bar
+
+      - name: order_uuid
+        description: "Identifier for the group of items placed as part of the same order."
+        tests:
+          - not_null
+
+      - name: quantity
+        description: "Number of identical items ordered."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 50
+
+      - name: order_date
+        description: "Date extracted from datetime_ordered, used for aggregations."
+        tests:
+          - not_null
+
+      - name: order_hour
+        description: "Hour of the day (0–23) when the item was ordered."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 23
+
+      - name: order_weekday
+        description: "Day of the week (e.g., Monday, Tuesday) when the item was ordered."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
+      - name: item_name
+        description: "Human-readable name of the ordered item."
+        tests:
+          - not_null
+
+      - name: category
+        description: "Category of the ordered item (e.g., Starters, Red Wines, Cocktails)."
+        tests:
+          - not_null
+
+      - name: price
+        description: "Unit price of the ordered item at the time of ordering."
+        tests:
+          - not_null
+
+      - name: menu_source
+        description: "The menu source the item belongs to (e.g., a_la_carte, wine, dessert, cocktails_and_beer)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['a_la_carte', 'wine', 'dessert', 'cocktails_and_beer']
+
+      - name: total_item_revenue
+        description: "Total revenue for this item line, calculated as quantity × price."
+        tests:
+          - not_null
