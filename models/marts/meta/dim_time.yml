@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: dim_time
+    description: >
+      A time dimension extracted from the datetime_ordered field in fct_orders.
+      Enables slicing by hour, day of week, month, and weekend flag.
+    columns:
+      - name: datetime_ordered
+        description: "Exact timestamp when the order was placed."
+        tests: [not_null, unique]
+
+      - name: order_date
+        description: "Date portion of datetime_ordered."
+      - name: order_hour
+        description: "Hour (0–23) the order was placed."
+      - name: order_minute
+        description: "Minute (0–59) portion of the timestamp."
+      - name: order_weekday
+        description: "Weekday name (Monday–Sunday)."
+      - name: order_dayofweek
+        description: "Numeric weekday (1=Sunday to 7=Saturday)."
+      - name: is_weekend
+        description: "Boolean flag for Friday/Saturday/Sunday."
+      - name: order_month
+        description: "Month name (e.g., March)."
+      - name: order_month_num
+        description: "Month number (1–12)."
+      - name: order_year
+        description: "Year of the order."
