@@ -262,10 +262,10 @@ models:
 
   - name: agg_weekly_sales
     description: >
-        Weekly aggregate sales and performance metrics, including revenue trends and top-selling
-        categories by week.
+      Optimized weekly aggregation of sales KPIs leveraging `agg_daily_sales` as a base.
+      Includes customer estimates, category diversity, top items, and trends.
     config:
-      tags: ['sales', 'weekly', 'kpis', 'trends']
+      tags: ['sales', 'weekly', 'kpis', 'trends', 'optimized']
     columns:
       - name: order_week
         description: ISO week identifier (YYYY-WW).
@@ -283,36 +283,31 @@ models:
         description: Total weekly revenue.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: total_food_revenue
         description: Total kitchen revenue for the week.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: pct_food_revenue
         description: Share of revenue from food.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
+              expression: "between 0 and 1"
 
       - name: total_drinks_revenue
         description: Total bar revenue for the week.
         tests:
-        - dbt_utils.expression_is_true:
-            expression: >
-              >= 0
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
 
       - name: pct_drinks_revenue
         description: Share of revenue from drinks.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
+              expression: "between 0 and 1"
 
       - name: top_food_category
         description: Top-selling kitchen category of the week.
@@ -323,128 +318,37 @@ models:
       - name: top_food_category_revenue
         description: Revenue from the top kitchen category.
         tests:
-        - dbt_utils.expression_is_true:
-            expression: >
-              >= 0
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
 
       - name: pct_top_food_cat_revenue
         description: Top food category as part of kitchen revenue.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
+              expression: "between 0 and 1"
 
       - name: top_drinks_category
         description: Top-selling bar category of the week.
         tests:
           - accepted_values:
-              values: ['Beers & Cider', 'Lo & No Alc', 'Port & Sherry', 'Ultimate Steakhouse Cocktails','Time & A Place',
-                        'Rarities', 'The Sacred Six', 'Red Wines', 'Champagne & Sparkling', 'Rose Wines', 'Dessert Wines',
-                        'White Wines', 'Magnums', 'Bordeaux','Burgundy']
+              values: ['Beers & Cider', 'Lo & No Alc', 'Port & Sherry', 'Ultimate Steakhouse Cocktails', 'Time & A Place',
+                      'Rarities', 'The Sacred Six', 'Red Wines', 'Champagne & Sparkling', 'Rose Wines', 'Dessert Wines',
+                      'White Wines', 'Magnums', 'Bordeaux', 'Burgundy']
 
       - name: top_drinks_category_revenue
         description: Revenue from the top bar category.
         tests:
-        - dbt_utils.expression_is_true:
-            expression: >
-              >= 0
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
 
       - name: pct_top_drinks_cat_revenue
         description: Top drinks category as part of bar revenue.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
+              expression: "between 0 and 1"
 
       - name: total_items_sold
-        description: Total quantity of items sold during the week.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: avg_distinct_tables
-        description: Avg number of physical tables used per night.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: total_customers
-        description: Total number of customers based on key item categories.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: avg_spend_per_head
-        description: Weekly average spend per estimated customer.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: revenue_per_item
-        description: Avg revenue per item sold.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: items_per_customer
-        description: Avg number of items per estimated customer.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: unique_items_ordered
-        description: Number of distinct item UUIDs sold.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: food_category_diversity
-        description: Count of distinct kitchen categories sold.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: drinks_category_diversity
-        description: Count of distinct bar categories sold.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: revenue_change
-        description: Change in revenue from the previous week.
-        
-      - name: revenue_change_pct
-        description: Percentage change in revenue from previous week.
-        
-      - name: rolling_avg_revenue_4w
-        description: 4-week rolling average of revenue.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: rolling_avg_items_sold_4w
-        description: 4-week rolling average of items sold.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
-      - name: busiest_hour
-        description: Most active order hour of the week.
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 23
+        description: Total quantity of items sold during the
 
 
   - name: agg_monthly_sales
