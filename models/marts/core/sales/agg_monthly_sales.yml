@@ -1,0 +1,132 @@
+version: 2
+
+models:
+  - name: agg_monthly_sales
+    description: >
+      Monthly aggregation of sales KPIs including customer estimates, top items, category performance,
+      and weekend distribution.
+    columns:
+      - name: order_month
+        description: Month of the order (YYYY-MM).
+        tests:
+          - not_null
+          - unique
+
+      - name: total_revenue
+        description: Total revenue for the month.
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: total_food_revenue
+        description: Revenue from kitchen items.
+
+      - name: pct_food_revenue
+        description: Share of food in total revenue.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 1
+
+      - name: total_drinks_revenue
+        description: Revenue from bar items.
+
+      - name: pct_drinks_revenue
+        description: Share of drinks in total revenue.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 1
+
+      - name: top_food_category
+        description: Top-selling kitchen category.
+
+      - name: top_food_category_revenue
+        description: Revenue from top kitchen category.
+
+      - name: pct_top_food_cat_revenue
+        description: Top food category as part of food revenue.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 1
+
+      - name: top_drinks_category
+        description: Top-selling bar category.
+
+      - name: top_drinks_category_revenue
+        description: Revenue from top bar category.
+
+      - name: pct_top_drinks_cat_revenue
+        description: Top drinks category as part of drinks revenue.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 1
+
+      - name: total_items_sold
+        description: Total number of items sold.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: avg_distinct_tables
+        description: Avg number of physical tables used per night.
+
+      - name: total_customers
+        description: Total number of individual customers.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: avg_spend_per_head
+        description: Avg spend per estimated customer.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: revenue_per_item
+        description: Avg revenue per item sold.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: items_per_customer
+        description: Avg number of items per estimated customer.
+
+      - name: unique_items_ordered
+        description: Total number of distinct items ordered.
+
+      - name: food_category_diversity
+        description: Number of distinct food categories ordered.
+
+      - name: drinks_category_diversity
+        description: Number of distinct drink categories ordered.
+
+      - name: weekend_days
+        description: Count of weekend days in the month (with at least one order).
+
+      - name: revenue_change
+        description: Month-over-month revenue delta.
+
+      - name: revenue_change_pct
+        description: Month-over-month revenue change in percentage.
+
+      - name: rolling_avg_revenue_3m
+        description: 3-month rolling avg of total revenue.
+
+      - name: rolling_avg_items_sold_3m
+        description: 3-month rolling avg of total items sold.
+
+      - name: busiest_hour
+        description: Hour of the month with highest item volume.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 23

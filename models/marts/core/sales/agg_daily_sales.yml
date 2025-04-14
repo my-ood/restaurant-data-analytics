@@ -1,0 +1,132 @@
+version: 2
+
+models:
+  - name: agg_daily_sales
+    description: >
+      Daily sales KPIs aggregated from fct_orders, including revenue metrics, customer estimates,
+      product diversity, and trends.
+    columns:
+      - name: order_date
+        description: Date of the order (aggregation level).
+        tests:
+          - not_null
+          - unique
+
+      - name: total_revenue
+        description: Total revenue across all items for the day.
+        tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: total_food_revenue
+        description: Revenue from kitchen items only.
+
+      - name: pct_food_revenue
+        description: Share of total revenue from food.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 1
+
+      - name: total_drinks_revenue
+        description: Revenue from bar items only.
+
+      - name: pct_drinks_revenue
+        description: Share of total revenue from drinks.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 1
+
+      - name: top_food_category
+        description: Highest-grossing kitchen category.
+
+      - name: top_food_category_revenue
+        description: Revenue from the top kitchen category.
+
+      - name: pct_top_food_cat_revenue
+        description: Top food category as part of kitchen revenue.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 1
+
+      - name: top_drinks_category
+        description: Highest-grossing bar category.
+
+      - name: top_drinks_category_revenue
+        description: Revenue from the top bar category.
+
+      - name: pct_top_drinks_cat_revenue
+        description: Top drinks category as part of bar revenue.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 1
+
+      - name: total_items_sold
+        description: Total quantity of items sold.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: distinct_tables
+        description: Count of unique tables used during the day.
+
+      - name: total_customers
+        description: Total number of customers based on Mains/Steaks/Large Cuts.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: avg_spend_per_head
+        description: Average revenue per estimated customer.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: revenue_per_item
+        description: Average revenue per item sold.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                >= 0
+
+      - name: items_per_customer
+        description: Average number of items per estimated customer.
+
+      - name: unique_items_ordered
+        description: Count of unique item UUIDs ordered.
+
+      - name: food_category_diversity
+        description: Number of distinct kitchen categories.
+
+      - name: drinks_category_diversity
+        description: Number of distinct bar categories.
+
+      - name: is_weekend
+        description: Whether the date falls on a Saturday or Sunday.
+
+      - name: revenue_change
+        description: Day-over-day change in total revenue.
+
+      - name: revenue_change_pct
+        description: Percentage change in total revenue from previous day.
+
+      - name: rolling_avg_revenue_7d
+        description: 7-day rolling average of total revenue.
+
+      - name: rolling_avg_items_sold_7d
+        description: 7-day rolling average of items sold.
+
+      - name: busiest_hour
+        description: Hour of the day with the most items sold.
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: >
+                between 0 and 23
