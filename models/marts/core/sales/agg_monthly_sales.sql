@@ -98,9 +98,6 @@ select
     round(d.total_revenue / nullif(d.total_customers, 0), 2) as avg_spend_per_head,
     d.revenue_per_item,
     round(d.total_items_sold / nullif(d.total_customers, 0), 2) as items_per_customer,
-    uio.unique_items_ordered,
-    mfd.food_category_diversity as food_category_diversity,
-    mdd.drinks_category_diversity as drinks_category_diversity,
     d.weekend_days,
     d.revenue_change,
     d.revenue_change_pct,
@@ -109,9 +106,6 @@ select
     bh.busiest_hour
 from with_changes d
 left join {{ ref('agg_monthly_item_metadata') }} using (order_month)
-left join unique_items_ordered uio using (order_month)
-left join monthly_food_category_diversity mfd using (order_month)
-left join monthly_drinks_category_diversity mdd using (order_month)
 left join top_food tf on d.order_month = tf.order_month and tf.rnk = 1
 left join top_drinks td on d.order_month = td.order_month and td.rnk = 1
 left join busiest_hours bh on d.order_month = bh.order_month and bh.hour_rank = 1

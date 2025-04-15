@@ -101,9 +101,6 @@ select
     round(d.total_revenue / d.total_customers, 2) as avg_spend_per_head,
     d.revenue_per_item,
     round(d.total_items_sold / d.total_customers, 2) as items_per_customer,
-    uio.unique_items_ordered,
-    wfd.food_category_diversity as food_category_diversity,
-    wdd.drinks_category_diversity as drinks_category_diversity,
     d.revenue_change,
     d.revenue_change_pct,
     d.rolling_avg_revenue_4w,
@@ -111,9 +108,6 @@ select
     bh.busiest_hour
 from with_changes d
 left join {{ ref('agg_weekly_item_metadata') }} using (order_week)
-left join unique_items_ordered uio using (order_week)
-left join weekly_food_category_diversity wfd using (order_week)
-left join weekly_drinks_category_diversity wdd using (order_week)
 left join top_food tf on d.order_week = tf.order_week and tf.rnk = 1
 left join top_drinks td on d.order_week = td.order_week and td.rnk = 1
 left join busiest_hours bh on d.order_week = bh.order_week and bh.hour_rank = 1
