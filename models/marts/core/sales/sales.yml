@@ -353,8 +353,8 @@ models:
 
   - name: agg_monthly_sales
     description: >
-      Monthly aggregation of sales KPIs including customer estimates, top items, category performance,
-      and weekend distribution.
+      Optimized monthly aggregation of sales KPIs using agg_daily_sales as the base,
+      including customer estimates, top items, category performance, and weekend distribution.
     config:
       tags: ['sales', 'monthly', 'kpis', 'trends']
     columns:
@@ -369,183 +369,158 @@ models:
         tests:
           - not_null
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: total_food_revenue
         description: Revenue from kitchen items.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: pct_food_revenue
         description: Share of food in total revenue.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
+              expression: "between 0 and 1"
 
       - name: total_drinks_revenue
         description: Revenue from bar items.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: pct_drinks_revenue
         description: Share of drinks in total revenue.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
+              expression: "between 0 and 1"
 
       - name: top_food_category
         description: Top-selling kitchen category.
         tests:
           - accepted_values:
-              values: ['Mains', 'Large Cuts', 'Steaks', 'Cheese', 'Sides', 'Sauces', 'Puddings', 'Ice-Cream & Sorbet', 'Extras', 'Chocolates', 'Starters']
+              values: ['Mains', 'Large Cuts', 'Steaks', 'Cheese', 'Sides', 'Sauces', 'Puddings',
+                      'Ice-Cream & Sorbet', 'Extras', 'Chocolates', 'Starters']
 
       - name: top_food_category_revenue
         description: Revenue from top kitchen category.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: pct_top_food_cat_revenue
         description: Top food category as part of food revenue.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
+              expression: "between 0 and 1"
 
       - name: top_drinks_category
         description: Top-selling bar category.
         tests:
           - accepted_values:
-              values: ['Beers & Cider', 'Lo & No Alc', 'Port & Sherry', 'Ultimate Steakhouse Cocktails','Time & A Place',
-                        'Rarities', 'The Sacred Six', 'Red Wines', 'Champagne & Sparkling', 'Rose Wines', 'Dessert Wines',
-                        'White Wines', 'Magnums', 'Bordeaux','Burgundy']
+              values: ['Beers & Cider', 'Lo & No Alc', 'Port & Sherry', 'Ultimate Steakhouse Cocktails',
+                      'Time & A Place', 'Rarities', 'The Sacred Six', 'Red Wines', 'Champagne & Sparkling',
+                      'Rose Wines', 'Dessert Wines', 'White Wines', 'Magnums', 'Bordeaux', 'Burgundy']
 
       - name: top_drinks_category_revenue
         description: Revenue from top bar category.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: pct_top_drinks_cat_revenue
         description: Top drinks category as part of drinks revenue.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
+              expression: "between 0 and 1"
 
       - name: total_items_sold
         description: Total number of items sold.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: avg_distinct_tables
         description: Avg number of physical tables used per night.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: total_customers
         description: Total number of individual customers.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: avg_spend_per_head
         description: Avg spend per estimated customer.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: revenue_per_item
         description: Avg revenue per item sold.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: items_per_customer
         description: Avg number of items per estimated customer.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: unique_items_ordered
         description: Total number of distinct items ordered.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: food_category_diversity
         description: Number of distinct food categories ordered.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: drinks_category_diversity
         description: Number of distinct drink categories ordered.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: weekend_days
         description: Count of weekend days in the month (with at least one order).
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: revenue_change
         description: Month-over-month revenue delta.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
+              expression: ">= 0"
 
       - name: revenue_change_pct
         description: Month-over-month revenue change in percentage.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 1
-
+              expression: "between 0 and 1"
 
       - name: rolling_avg_revenue_3m
         description: 3-month rolling avg of total revenue.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
+              expression: ">= 0"
 
       - name: rolling_avg_items_sold_3m
         description: 3-month rolling avg of total items sold.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                >= 0
-
+              expression: ">= 0"
 
       - name: busiest_hour
         description: Hour of the month with highest item volume.
         tests:
           - dbt_utils.expression_is_true:
-              expression: >
-                between 0 and 23
+              expression: "between 0 and 23"
+
