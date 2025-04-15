@@ -40,35 +40,13 @@ weekly_kpis as (
         sum(total_items_sold) as total_items_sold,
         avg(distinct_tables) as avg_distinct_tables,
         round(sum(total_revenue) / sum(total_items_sold), 2) as revenue_per_item,
-        sum(food_category_diversity) as food_category_diversity,
-        sum(drinks_category_diversity) as drinks_category_diversity
+        sum(total_customers) as total_customers,
+        sum(total_food_revenue) as total_food_revenue,
+        sum(total_drinks_revenue) as total_drinks_revenue,
     from base
     group by order_week
 ),
 
-total_customers as (
-    select
-        order_week,
-        sum(total_customers) as total_customers
-    from base
-    group by order_week
-),
-
-food_revenue as (
-    select
-        order_week,
-        sum(total_food_revenue) as total_food_revenue
-    from base
-    group by order_week
-),
-
-drinks_revenue as (
-    select
-        order_week,
-        sum(total_drinks_revenue) as total_drinks_revenue
-    from base
-    group by order_week
-),
 
 top_food as (
     select
@@ -131,25 +109,25 @@ select
     d.week_start_date,
     d.week_end_date,
     d.total_revenue,
-    fr.total_food_revenue,
-    round(fr.total_food_revenue / d.total_revenue, 2) as pct_food_revenue,
-    dr.total_drinks_revenue,
-    round(dr.total_drinks_revenue / d.total_revenue, 2) as pct_drinks_revenue,
+    d.total_food_revenue,
+    round(d.total_food_revenue / d.total_revenue, 2) as pct_food_revenue,
+    d.total_drinks_revenue,
+    round(d.total_drinks_revenue / d.total_revenue, 2) as pct_drinks_revenue,
 
     tf.category as top_food_category,
     tf.category_revenue as top_food_category_revenue,
-    round(tf.category_revenue / fr.total_food_revenue, 2) as pct_top_food_cat_revenue,
+    round(tf.category_revenue / d.total_food_revenue, 2) as pct_top_food_cat_revenue,
 
     td.category as top_drinks_category,
     td.category_revenue as top_drinks_category_revenue,
-    round(td.category_revenue / dr.total_drinks_revenue, 2) as pct_top_drinks_cat_revenue,
+    round(td.category_revenue / d.total_drinks_revenue, 2) as pct_top_drinks_cat_revenue,
 
     d.total_items_sold,
     d.avg_distinct_tables,
-    tc.total_customers,
-    round(d.total_revenue / tc.total_customers, 2) as avg_spend_per_head,
+    d.total_customers,
+    round(d.total_revenue / d.total_customers, 2) as avg_spend_per_head,
     d.revenue_per_item,
-    round(d.total_items_sold / tc.total_customers, 2) as items_per_customer,
+    round(d.total_items_sold / d.total_customers, 2) as items_per_customer,
     uio.unique_items_ordered,
     wfd.food_category_diversity as food_category_diversity,
     wdd.drinks_category_diversity as drinks_category_diversity,
@@ -159,9 +137,6 @@ select
     d.rolling_avg_items_sold_4w,
     bh.busiest_hour
 from with_changes d
-left join food_revenue fr using (order_week)
-left join drinks_revenue dr using (order_week)
-left join total_customers tc using (order_week)
 left join unique_items_ordered uio using (order_week)
 left join weekly_food_category_diversity wfd using (order_week)
 left join weekly_drinks_category_diversity wdd using (order_week)
