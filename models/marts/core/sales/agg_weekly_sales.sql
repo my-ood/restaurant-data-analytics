@@ -4,33 +4,6 @@ with base as (
     from {{ ref('agg_daily_sales') }}
 ),
 
-unique_items_ordered as (
-    select
-        format_date('%G-%V', order_date) as order_week,
-        count(distinct item_uuid) as unique_items_ordered
-    from {{ ref('fct_orders') }}
-    group by order_week
-),
-
-weekly_food_category_diversity as (
-    select
-        format_date('%G-%V', order_date) as order_week,
-        count(distinct category) as food_category_diversity
-    from {{ ref('fct_orders') }}
-    where production_department = 'kitchen'
-    group by order_week
-),
-
-weekly_drinks_category_diversity as (
-    select
-        format_date('%G-%V', order_date) as order_week,
-        count(distinct category) as drinks_category_diversity
-    from {{ ref('fct_orders') }}
-    where production_department = 'bar'
-    group by order_week
-),
-
-
 weekly_kpis as (
     select
         order_week,
@@ -137,6 +110,7 @@ select
     d.rolling_avg_items_sold_4w,
     bh.busiest_hour
 from with_changes d
+left join {{ ref('agg_weekly_item_metadata') }} using (order_week)
 left join unique_items_ordered uio using (order_week)
 left join weekly_food_category_diversity wfd using (order_week)
 left join weekly_drinks_category_diversity wdd using (order_week)
