@@ -33,11 +33,14 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 models:
   restaurant_data_analytics:
-    +materialized: view  # Default fallback for everything
-
     staging:
       +materialized: view
-      
     marts:
-      +materialized: table
+      core:
+        sales:
+          +materialized: table
+        performance:
+          +materialized: table
+      meta:
+        +materialized: view
       
