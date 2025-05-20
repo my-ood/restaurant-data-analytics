@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: agg_customer_counts
+    description: >
+      Estimated number of customers per hour based on mains ordered.
+      Derived from `fct_orders`, this model counts all items in the 'Mains', 'Large Cuts', and 'Steaks' categories
+      that were sent to the kitchen, assuming one main per customer.
+    columns:
+      - name: order_hour_dt
+        description: "Timestamp truncated to the hour of when the order was placed."
+        tests:
+          - not_null
+          - unique
+
+      - name: order_date
+        description: "Date of the order (derived from datetime)."
+        tests:
+          - not_null
+
+      - name: total_mains_ordered_per_hour
+        description: "Total mains ordered in each hour. Used as a proxy for customer count."
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "total_mains_ordered_per_hour >= 0"

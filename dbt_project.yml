@@ -37,9 +37,12 @@ models:
       +materialized: view
     marts:
       core:
+        +materialized: table
         sales:
           +materialized: table
         performance:
+          +materialized: table
+        customers:
           +materialized: table
       meta:
         +materialized: view
