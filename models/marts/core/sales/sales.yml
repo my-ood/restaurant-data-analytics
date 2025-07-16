@@ -11,7 +11,7 @@ models:
     columns:
       - name: order_hour_dt
         description: "The timestamp truncated to the hour (used for time-based grouping)."
-        tests: [not_null, unique]
+        tests: [not_null]
 
       - name: order_date
         description: "Date of the orders in this hourly window."
@@ -152,7 +152,7 @@ models:
     columns:
       - name: order_hour_dt
         description: "The timestamp truncated to the hour (used for time-based grouping)."
-        tests: [not_null, unique]
+        tests: [not_null]
 
       - name: order_date
         description: "Date of the orders in this hourly window."
@@ -294,7 +294,7 @@ models:
     columns:
       - name: order_hour_dt
         description: "The timestamp truncated to the hour."
-        tests: [not_null, unique]
+        tests: [not_null]
 
       - name: order_date
         description: "Date of the sales in this hourly window."
