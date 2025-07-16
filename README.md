@@ -121,7 +121,7 @@ All test configurations are defined in modular `.yml` files per domain (`sales.y
 
 ## 📈 Business Use Cases
 
-- Track food vs. drink performance over time
+- Track food vs drink performance over time
 - Identify top- and bottom-performing items
 - Estimate customer counts based on order volume
 - Compare performance by time granularity (hourly → monthly)
